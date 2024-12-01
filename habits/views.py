@@ -31,6 +31,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
         """Сохранение привычки вместе с пользователем"""
         habit = serializer.save()
         habit.user = self.request.user
+
         habit = serializer.save()
         habit.save()
 

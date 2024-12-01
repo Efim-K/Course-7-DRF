@@ -1,11 +1,25 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.db import models
 
 NULLABLE = {"null": True, "blank": True}
 
 
-class Habit(models.Model):
+class CustomDateTimeField(models.DateTimeField):
+    """
+    Дата и время в формате ISO 8601 без секунд
+    """
 
+    def value_to_string(self, obj):
+        val = self.value_from_object(obj)
+        if val:
+            val.replace(microsecond=0)
+            return val.isoformat(" ", "minutes")
+        return obj
+
+
+class Habit(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -13,9 +27,13 @@ class Habit(models.Model):
         **NULLABLE,
     )
     location = models.CharField(
-        max_length=200, default="Везде", verbose_name="Место выполнения привычки"
+        max_length=200, default="В квартире", verbose_name="Место выполнения привычки"
     )
-    time = models.DateTimeField(verbose_name="Время выполнения привычки")
+    time = CustomDateTimeField(
+        default=datetime.now().isoformat(" ", "minutes"),
+        verbose_name="Время выполнения привычки",
+        help_text="Введите дату YYYY-MM-DD HH:MM",
+    )
     action = models.CharField(
         max_length=200, verbose_name="Действие, совершаемое под привычкой"
     )
