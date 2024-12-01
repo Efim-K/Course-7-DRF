@@ -40,7 +40,7 @@ class HabitsValidators:
                 )
 
         # Периодичность выполнения привычки должна быть реже 1 раз в 7 дней
-        if val.get("periodicity") and val["periodicity"] > 7:
+        if val.get("period") and val["period"] > 7:
             raise ValidationError(
                 "Периодичность выполнения привычки не может быть реже 1 раз в 7 дней"
             )
