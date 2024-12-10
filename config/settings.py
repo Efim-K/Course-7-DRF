@@ -21,10 +21,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_beat",
     "rest_framework",
     "rest_framework_simplejwt",
     "habits",
     "users",
+
+
+
 ]
 
 MIDDLEWARE = [
@@ -93,7 +97,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Asia/Yekaterinburg"
@@ -123,3 +126,23 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5000),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULE = {
+    "task-name": {
+        "task": "habits.tasks.telegram_message",
+        "schedule": timedelta(minutes=1),
+    },
+}
+
+TELEGRAM_URL = os.getenv("TELEGRAM_URL")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+
+

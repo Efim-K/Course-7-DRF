@@ -44,7 +44,8 @@ class Habit(models.Model):
         "self", on_delete=models.SET_NULL, verbose_name="Связанная привычка", **NULLABLE
     )
     period = models.PositiveIntegerField(
-        verbose_name="Периодичность выполнения привычки"
+        verbose_name="Периодичность выполнения привычки",
+        default=1,
     )
     award = models.CharField(max_length=200, verbose_name="Вознаграждение", **NULLABLE)
     complete_time = models.DurationField(

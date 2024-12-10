@@ -3,8 +3,8 @@ from rest_framework import generics
 from habits.models import Habit
 from habits.paginators import ViewPagination
 from habits.serializers import HabitSerializer
-from rest_framework.permissions import AllowAny
 from habits.permissions import IsOwner
+from habits.services import send_telegram_message
 
 
 class HabitListAPIView(generics.ListAPIView):
@@ -38,6 +38,9 @@ class HabitCreateAPIView(generics.CreateAPIView):
         habit = serializer.save()
         habit.user = self.request.user
         habit = serializer.save()
+        if habit.user.tg_chat_id:
+            send_telegram_message(habit.user.tg_chat_id,
+                                  f"Новая привычка! {habit.action} в {habit.time} в {habit.location}")
         habit.save()
 
 
