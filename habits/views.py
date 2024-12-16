@@ -37,11 +37,11 @@ class HabitCreateAPIView(generics.CreateAPIView):
         """Сохранение привычки вместе с пользователем"""
         habit = serializer.save()
         habit.user = self.request.user
-        habit = serializer.save()
+        habit.save()
         if habit.user.tg_chat_id:
             send_telegram_message(habit.user.tg_chat_id,
                                   f"Новая привычка! {habit.action} в {habit.time} в {habit.location}")
-        habit.save()
+
 
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):
