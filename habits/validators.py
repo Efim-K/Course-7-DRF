@@ -44,6 +44,3 @@ class HabitsValidators:
             raise ValidationError(
                 "Периодичность выполнения привычки не может быть реже 1 раз в 7 дней"
             )
-
-        # Валидация успешна, возвращаем привычку
-        return Habit.objects.create(**val)

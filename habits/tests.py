@@ -1,6 +1,5 @@
 from django.urls import reverse
 from rest_framework import status
-
 from rest_framework.test import APITestCase
 
 from habits.models import Habit
@@ -45,13 +44,9 @@ class HabitTestCase(APITestCase):
             "period": 1,
             "complete_time": "120",
         }
-        print('0:: ', self.client.get(reverse("habits:habits")).json())
-        print('1:: ', Habit.objects.all())
         response = self.client.post(url, data)
-        print('2:: ', Habit.objects.all())
-        print('3:: ', self.client.get(reverse("habits:habits")).json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Habit.objects.all().count(), 3)
+        self.assertEqual(Habit.objects.all().count(), 2)
 
     def test_habit_retrieve(self):
         url = reverse("habits:retrieve", args=(self.habit.pk,))
@@ -85,4 +80,3 @@ class HabitTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Habit.objects.all().count(), 0)
-
